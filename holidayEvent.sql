@@ -36,8 +36,13 @@ because Frank West made the 4th and the 12th purchases, and Diane Tucker's purch
 */
 CREATE PROCEDURE holidayEvent()
 BEGIN
-    select buyer_name winners
-        from purchases, (select @a:=0) y
-        where (@a:=@a + 1) % 4 = 0
-        group by buyer_name;
+SELECT DISTINCT buyer_name AS winners 
+FROM ( 
+    SELECT 
+        @rank := @rank +1 AS rownum, buyer_name
+    FROM ( 
+        SELECT @rank :=0) r, purchases 
+    ) ranked 
+WHERE rownum % 4 = 0
+ORDER By buyer_name;
 END
