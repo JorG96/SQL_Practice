@@ -55,7 +55,6 @@ Flight number 121 has 7 seats, and none of them have been purchased.
 */
 CREATE PROCEDURE solution()
 BEGIN
-CREATE PROCEDURE solution()
 SELECT flight_id, number_of_seats - COUNT(seat_no) free_seats
 FROM flights
 natural LEFT JOIN planes
