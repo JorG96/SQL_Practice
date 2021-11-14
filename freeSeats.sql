@@ -60,5 +60,5 @@ FROM flights
 natural LEFT JOIN planes
 natural LEFT JOIN purchases
 group by flight_id
-order by flight_id
-END;
+order by flight_id;
+END
