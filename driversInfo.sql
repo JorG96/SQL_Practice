@@ -48,6 +48,7 @@ summary
   date: 2014-03-15; miles covered: 256
 */
 CREATE PROCEDURE solution()
+BEGIN
 select concat(if(d,
                  concat('  date: ' , d, '; miles covered: '),
                  if(!n, 
@@ -60,4 +61,5 @@ from (select driver_name n, date d, sum(miles_logged) s, sum(1) c
       from inspections
       group by n, d
       with rollup) t
-order by n, d
+order by n, d;
+END
