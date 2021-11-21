@@ -46,25 +46,24 @@ Georgine Greely	5	5	2	1	2
 */
 CREATE PROCEDURE solution()
 BEGIN
-    SELECT
-        ELT(d, name_naughts, name_crosses) name,
-        sum((r=d)*2 + (r=3)) points,
-        sum(1) played,
-        sum(r=d) won,
-        sum(r=3) draw,
-        sum(r=3-d) lost
-    FROM
-        (SELECT
-            *,
-            IF(board RLIKE '^(...)*XXX|X..(X|.X.)..X|^..X.X.X', 2, 
-                LENGTH(REPLACE(board, '.', ''))%2*2+1
-            ) r
-        FROM results) x,
-        (SELECT 1 d UNION SELECT 2) b
-    GROUP BY 1
-    ORDER BY
-        2 DESC,
-        3,
-        5,
-        1
+     select n name, 
+            a + b - c points, 
+            a played,
+            b won,
+            a - b - c draw,
+            c lost
+         from (select if(x, name_naughts, name_crosses) n, 
+                      sum(1) a, 
+                      sum(if(x, w, l)) b,
+                      sum(if(x, l, w)) c
+                  from (select *, 
+                               board rlike "O...O...O|O..O..O|^..O.O.O|^(...)*OOO" w,
+                               board rlike "X...X...X|X..X..X|^..X.X.X|^(...)*XXX" l
+                            from results, 
+                                 (select 0 x union select 1) z
+                       ) y 
+                  group by 1
+              ) x  
+         order by 2 desc, 3, won desc, 1;
+	
 END
